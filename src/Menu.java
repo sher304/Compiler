@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
 
 public class Menu extends JFrame {
 
@@ -26,7 +27,6 @@ public class Menu extends JFrame {
 
         JList<String> listModel = new JList<>(modelList);
         JScrollPane modelScrollPane = new JScrollPane(listModel);
-        modelScrollPane.setPreferredSize(new Dimension(100, 1000));
         listPanel.add(modelScrollPane);
 
         DefaultListModel<String> dataList = new DefaultListModel<>();
@@ -37,6 +37,7 @@ public class Menu extends JFrame {
 
         JList<String> listData = new JList<>(dataList);
         JScrollPane dataScrollPane = new JScrollPane(listData);
+        dataScrollPane.setVisible(false);
         listPanel.add(dataScrollPane);
 
         leftPanel.add(listPanel);
@@ -48,8 +49,23 @@ public class Menu extends JFrame {
         JPanel rightPanel = new JPanel(new GridLayout(2, 1));
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton runScriptButton = new JButton("Run script from file");
+
+        runScriptButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser("user.home");
+            int returnValue = fileChooser.showOpenDialog(null);
+
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile(); // This is a selected script.
+
+            }
+        });
+
         runScriptButton.setPreferredSize(new Dimension(150, 50));
         JButton createScriptButton = new JButton("Create and run ad hoc script");
+
+        createScriptButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> showScriptDialog());
+        });
         createScriptButton.setPreferredSize(new Dimension(200, 50));
         buttonPanel.add(runScriptButton);
         buttonPanel.add(createScriptButton);
@@ -72,8 +88,30 @@ public class Menu extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setVisible(false);
         rightPanel.add(tableScrollPane, BorderLayout.CENTER);
         rightPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(rightPanel);
+    }
+
+    public void showScriptDialog() {
+        JFrame frame = new JFrame("Script");
+        frame.setVisible(true);
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
+        JTextArea scriptTextField = new JTextArea();
+        JScrollPane scriptTextFieldScroll = new JScrollPane(scriptTextField);
+        frame.add(scriptTextFieldScroll, BorderLayout.CENTER);
+        JPanel buttonsPanel = new JPanel(new GridLayout(1 , 2));
+        JButton runButton = new JButton("Ok");
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener( e -> {
+            frame.dispose();
+        });
+        buttonsPanel.add(runButton);
+        buttonsPanel.add(cancelButton);
+        frame.add(buttonsPanel, BorderLayout.SOUTH);
     }
 }
