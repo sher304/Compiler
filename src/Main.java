@@ -7,8 +7,8 @@ import java.util.Arrays;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args){
-        SwingUtilities.invokeLater(() -> menuStart());
+    public static void main(String[] args) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+//        SwingUtilities.invokeLater(() -> menuStart());
         Controller ctl = new Controller("Model1");
         String dataDir = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
         ctl.readDataFrom(dataDir + "data1.txt");
