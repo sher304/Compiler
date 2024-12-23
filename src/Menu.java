@@ -1,4 +1,7 @@
+
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
@@ -14,11 +17,13 @@ public class Menu extends JFrame {
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-
         JLabel selectLabel = new JLabel("Select model and data");
-        leftPanel.add(selectLabel, BorderLayout.NORTH);
+        leftPanel.add(selectLabel);
 
-        JPanel listPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        // Data Table
+        JPanel childLeftPanel = new JPanel(new BorderLayout());
+        childLeftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        JPanel listPanel = new JPanel(new GridLayout(1, 2));
         DefaultListModel<String> modelList = new DefaultListModel<>();
         modelList.addElement("Model1");
         modelList.addElement("Model2");
@@ -37,16 +42,17 @@ public class Menu extends JFrame {
 
         JList<String> listData = new JList<>(dataList);
         JScrollPane dataScrollPane = new JScrollPane(listData);
-        dataScrollPane.setVisible(false);
+//        dataScrollPane.setVisible(false);
         listPanel.add(dataScrollPane);
-
-        leftPanel.add(listPanel);
+        childLeftPanel.add(listPanel, BorderLayout.CENTER);
 
         JButton runModelButton = new JButton("Run model");
-        leftPanel.add(runModelButton);
+        childLeftPanel.add(runModelButton,BorderLayout.SOUTH);
+
+        leftPanel.add(childLeftPanel);
         add(leftPanel, BorderLayout.WEST);
 
-        JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+        JPanel rightPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton runScriptButton = new JButton("Run script from file");
 
@@ -70,6 +76,7 @@ public class Menu extends JFrame {
         buttonPanel.add(runScriptButton);
         buttonPanel.add(createScriptButton);
 
+        // Right Table
         String[] columnNames = {"", "2015", "2016", "2017", "2018", "2019"};
         Object[][] data = {
                 {"twKI", "1,03", "1,03", "1,03", "1,03", "1,03"},
@@ -88,7 +95,7 @@ public class Menu extends JFrame {
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setVisible(false);
+//        tableScrollPane.setVisible(false);
         rightPanel.add(tableScrollPane, BorderLayout.CENTER);
         rightPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(rightPanel);
