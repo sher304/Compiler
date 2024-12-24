@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -15,19 +16,14 @@ public class Controller {
     }
 
     public void readDataFrom(String fname) {
-        System.out.println("START");
         Arrays.stream(dataModel.getClass().getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Bind.class))
                 .forEach(field -> {
-                    System.out.println("START 2");
+                    field.setAccessible(true);
                     try {
-                        field.setAccessible(true);
-                        System.out.println("START 3");
                         if (field.getName().equals("LL")) {
                             field.set(dataModel, 5);
-                            System.out.println("START LL");
                         } else {
-                            System.out.println("SETTED TO THE FIELD: " + field.getName());
                             field.set(dataModel, new double[5]);
                         }
                     } catch (IllegalAccessException e) {
@@ -40,7 +36,7 @@ public class Controller {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
+//                System.out.println(data);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
@@ -50,7 +46,7 @@ public class Controller {
     }
 
     public void runModel() throws InvocationTargetException, IllegalAccessException {
-//        modelRunMethod.invoke(dataModel);
+        modelRunMethod.invoke(dataModel);
     }
 
     public void runScriptFromFile(String fname) {

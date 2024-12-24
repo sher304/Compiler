@@ -17,8 +17,6 @@ public class Model {
     public Model () {}
 
     public void run() {
-        System.out.println("DATAS: ");
-        System.out.println("DATAS: " + KS  + " " + KS);
         PKB = new double[LL];
         PKB[0] = KI[0] + KS[0] + INW[0] + EKS[0] - IMP[0];
         for (int t = 1; t < LL; t++) {
