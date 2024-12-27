@@ -4,10 +4,17 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class Menu extends JFrame {
-
+    private DefaultListModel<String> modelList = new DefaultListModel<>();
+    DefaultListModel<String> dataList = new DefaultListModel<>();
+    DefaultTableModel tableModel = new DefaultTableModel();
     public Menu() {
         setTitle("Modelling framework sample");
         setSize(800, 600);
@@ -24,21 +31,20 @@ public class Menu extends JFrame {
         JPanel childLeftPanel = new JPanel(new BorderLayout());
         childLeftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         JPanel listPanel = new JPanel(new GridLayout(1, 2));
-        DefaultListModel<String> modelList = new DefaultListModel<>();
         modelList.addElement("Model1");
         modelList.addElement("Model2");
         modelList.addElement("Model3");
         modelList.addElement("MultiAgentSim");
 
         JList<String> listModel = new JList<>(modelList);
+        listModel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(listModel.getSelectedValue());
+            }
+        });
         JScrollPane modelScrollPane = new JScrollPane(listModel);
         listPanel.add(modelScrollPane);
-
-        DefaultListModel<String> dataList = new DefaultListModel<>();
-        dataList.addElement("HS6_EU_all.txt");
-        dataList.addElement("data1.txt");
-        dataList.addElement("data2.txt");
-        dataList.addElement("data3.txt");
 
         JList<String> listData = new JList<>(dataList);
         JScrollPane dataScrollPane = new JScrollPane(listData);
@@ -77,22 +83,6 @@ public class Menu extends JFrame {
         buttonPanel.add(createScriptButton);
 
         // Right Table
-        String[] columnNames = {"", "2015", "2016", "2017", "2018", "2019"};
-        Object[][] data = {
-                {"twKI", "1,03", "1,03", "1,03", "1,03", "1,03"},
-                {"twKS", "1,04", "1,04", "1,04", "1,04", "1,04"},
-                {"twINW", "1,12", "1,12", "1,12", "1,12", "1,12"},
-                {"twEKS", "1,13", "1,13", "1,13", "1,13", "1,13"},
-                {"twIMP", "1,14", "1,14", "1,14", "1,14", "1,14"},
-                {"KI", "1 023 752,2", "1 054 464,8", "1 086 098,7", "1 118 681,7", "1 152 242,1"},
-                {"KS", "315 397", "328 012,9", "341 133,4", "354 778,7", "368 969,9"},
-                {"INW", "348 358", "390 161", "436 980,3", "489 417,9", "548 148,1"},
-                {"EKS", "811 108,6", "916 552,7", "1 035 704,6", "1 170 346,2", "1 322 491,2"},
-                {"IMP", "784 342,4", "894 150,3", "1 019 331,4", "1 162 037,8", "1 324 723,1"},
-                {"PKB", "1 714 273,4", "1 795 041", "1 880 585,6", "1 971 186,7", "2 067 128,2"}
-        };
-
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
         JTable table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
 //        tableScrollPane.setVisible(false);
@@ -120,5 +110,19 @@ public class Menu extends JFrame {
         buttonsPanel.add(runButton);
         buttonsPanel.add(cancelButton);
         frame.add(buttonsPanel, BorderLayout.SOUTH);
+    }
+
+    public void setDataModel(List<String> dataModel) {
+        for(int i = 0; i < dataModel.size(); i++) dataList.addElement(dataModel.get(i));
+    }
+
+    public void setColumnNames(String[] columnNames) {
+        for(int i = 0; i < columnNames.length; i++) tableModel.addColumn(columnNames[i]);
+    }
+
+    public void setData(String[][] data) {
+        for (String[] row : data) {
+            tableModel.addRow(row);
+        }
     }
 }
