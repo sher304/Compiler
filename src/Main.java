@@ -11,7 +11,7 @@ public class Main {
 //        SwingUtilities.invokeLater(() -> menuStart());
         Controller ctl = new Controller("Model1");
         String dataDir = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
-        ctl.readDataFrom(dataDir + "data1.txt");
+        ctl.readDataFrom(dataDir + "data2.txt");
         ctl.runModel();
         String res = ctl.getResultsAsTsv();
         System.out.println(res);
