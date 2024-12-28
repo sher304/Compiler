@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Model {
     @Bind private int LL; // number of years
     @Bind private double[] twKI; // the growth rate of private consumption

@@ -33,7 +33,6 @@ public class Controller {
     }
 
     public void readDataFrom(String fname) {
-
         try {
             File myObj = new File(fname);
             Scanner myReader = new Scanner(myObj);
@@ -189,6 +188,13 @@ public class Controller {
                         throw new RuntimeException(e);
                     }
                 });
+        try {
+            runModel();
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void runModel() throws InvocationTargetException, IllegalAccessException {

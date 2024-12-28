@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -13,9 +14,14 @@ import java.util.Set;
 
 public class Menu extends JFrame {
     private DefaultListModel<String> modelList = new DefaultListModel<>();
-    DefaultListModel<String> dataList = new DefaultListModel<>();
-    DefaultTableModel tableModel = new DefaultTableModel();
-    public Menu() {
+    private DefaultListModel<String> dataList = new DefaultListModel<>();
+    private DefaultTableModel tableModel = new DefaultTableModel();
+    private JScrollPane dataScrollPane;
+    private final String path = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
+    private String selectedData;
+    Controller controller;
+    public Menu(Controller controller) {
+        this.controller = controller;
         setTitle("Modelling framework sample");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,19 +46,34 @@ public class Menu extends JFrame {
         listModel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println(listModel.getSelectedValue());
+                dataScrollPane.setVisible(true);
             }
         });
         JScrollPane modelScrollPane = new JScrollPane(listModel);
         listPanel.add(modelScrollPane);
 
         JList<String> listData = new JList<>(dataList);
-        JScrollPane dataScrollPane = new JScrollPane(listData);
-//        dataScrollPane.setVisible(false);
+        listData.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                selectedData = listData.getSelectedValue();
+            }
+        });
+        dataScrollPane = new JScrollPane(listData);
+        dataScrollPane.setVisible(false);
         listPanel.add(dataScrollPane);
         childLeftPanel.add(listPanel, BorderLayout.CENTER);
 
         JButton runModelButton = new JButton("Run model");
+        runModelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (selectedData.isBlank()) return;
+                controller.readDataFrom(path + selectedData);
+                setColumnNames();
+                setData();
+            }
+        });
         childLeftPanel.add(runModelButton,BorderLayout.SOUTH);
 
         leftPanel.add(childLeftPanel);
@@ -116,11 +137,15 @@ public class Menu extends JFrame {
         for(int i = 0; i < dataModel.size(); i++) dataList.addElement(dataModel.get(i));
     }
 
-    public void setColumnNames(String[] columnNames) {
+    public void setColumnNames() {
+        tableModel.setColumnCount(0);
+        String[] columnNames = controller.getLLvalues();
         for(int i = 0; i < columnNames.length; i++) tableModel.addColumn(columnNames[i]);
     }
 
-    public void setData(String[][] data) {
+    public void setData() {
+        tableModel.setRowCount(0);
+        String[][] data = controller.getBindFields();
         for (String[] row : data) {
             tableModel.addRow(row);
         }

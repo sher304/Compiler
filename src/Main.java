@@ -16,9 +16,6 @@ public class Main {
         Controller ctl = new Controller("Model1");
         String dataDir = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
         ctl.readDataFrom(dataDir + "data2.txt");
-        ctl.runModel();
-        String res = ctl.getResultsAsTsv();
-        System.out.println(res);
         SwingUtilities.invokeLater(() -> menuStart(ctl));
     }
 
@@ -30,11 +27,9 @@ public class Main {
     }
 
     private static void menuStart(Controller controller) {
-        Menu menu = new Menu();
+        Menu menu = new Menu(controller);
         menu.setVisible(true);
         List<String> dataLists = listFilesUsingJavaIO("/Users/esherow/Desktop/Java/Compiler/Compiler/src");
         menu.setDataModel(dataLists);
-        menu.setColumnNames(controller.getLLvalues());
-        menu.setData(controller.getBindFields());
     }
 }
