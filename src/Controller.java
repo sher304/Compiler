@@ -1,9 +1,14 @@
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -206,35 +211,20 @@ public class Controller {
     }
 
     public void runScript(String script) {
-
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+        ScriptEngine groovy = scriptEngineManager.getEngineByName("groovy");
+        groovy.put("LL", LL);
+        groovy.put("PKB", PKB);
+        try {
+            Object res = groovy.eval(script);
+            double[] DPKB = (double[]) res;
+            System.out.println("DPKB: " + java.util.Arrays.toString(DPKB));
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getResultsAsTsv() {
-//        for(int i = 0; i < LL; i++) {
-//            System.out.println("LATA ");
-//            System.out.print("twKI " + twKI[i]);
-//            System.out.println("");
-//            System.out.print("twKS " + twKS[i]);
-//            System.out.println("");
-//            System.out.print("twINW " + twINW[i]);
-//            System.out.println("");
-//            System.out.print("twEKS " + twEKS[i]);
-//            System.out.println("");
-//            System.out.print("twIMP " + twIMP[i]);
-//            System.out.println("");
-//            System.out.print("KI " + KI[i]);
-//            System.out.println("");
-//            System.out.print("KS " + KS[i]);
-//            System.out.println("");
-//            System.out.print("INW " + INW[i]);
-//            System.out.println("");
-//            System.out.print("EKS " + EKS[i]);
-//            System.out.println("");
-//            System.out.print("IMP " + IMP[i]);
-//            System.out.println("");
-//            System.out.print("PKB " + PKB[i]);
-//            System.out.println("");
-//        }
         return "";
     }
 
@@ -254,74 +244,73 @@ public class Controller {
                                 bindFields[0] = Stream.concat(Arrays.stream(new String[]{"twKI"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "twKS":
                                 bindFields[1] = Stream.concat(Arrays.stream(new String[]{"twKS"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "twINW":
                                 bindFields[2] = Stream.concat(Arrays.stream(new String[]{"twINW"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "twEKS":
                                 bindFields[3] = Stream.concat(Arrays.stream(new String[]{"twEKS"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "twIMP":
                                 bindFields[4] = Stream.concat(Arrays.stream(new String[]{"twIMP"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "KI":
                                 bindFields[5] = Stream.concat(Arrays.stream(new String[]{"KI"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "KS":
                                 bindFields[6] = Stream.concat(Arrays.stream(new String[]{"KS"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "INW":
                                 bindFields[7] = Stream.concat(Arrays.stream(new String[]{"INW"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "EKS":
                                 bindFields[8] = Stream.concat(Arrays.stream(new String[]{"EKS"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "IMP":
                                 bindFields[9] = Stream.concat(Arrays.stream(new String[]{"IMP"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                             case "PKB":
                                 bindFields[10] = Stream.concat(Arrays.stream(new String[]{"PKB"}), Arrays.stream(Arrays.stream((double[]) field.get(dataModel))
                                                 .mapToObj(String::valueOf)
                                                 .toArray(String[]::new)))
-                                        .toArray(String[]::new);;
+                                        .toArray(String[]::new);
                                 break;
                         }
                     }  catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
                 });
-
         return bindFields;
     }
 }

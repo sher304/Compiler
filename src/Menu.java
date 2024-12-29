@@ -1,16 +1,11 @@
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class Menu extends JFrame {
     private DefaultListModel<String> modelList = new DefaultListModel<>();
@@ -89,7 +84,7 @@ public class Menu extends JFrame {
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile(); // This is a selected script.
-
+                if(selectedFile.toString().endsWith(".groovy")) controller.runScriptFromFile(selectedFile.toString());
             }
         });
 
@@ -124,6 +119,9 @@ public class Menu extends JFrame {
         frame.add(scriptTextFieldScroll, BorderLayout.CENTER);
         JPanel buttonsPanel = new JPanel(new GridLayout(1 , 2));
         JButton runButton = new JButton("Ok");
+        runButton.addActionListener(e -> {
+            controller.runScript(scriptTextField.getText());
+        });
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener( e -> {
             frame.dispose();
