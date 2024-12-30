@@ -209,37 +209,60 @@ public class Controller {
         modelRunMethod.invoke(dataModel);
     }
 
-    public void runScriptFromFile(String fname) {
-
+    public List<String[]> runScriptFromFile(String fname) {
+        String script = "";
+        try {
+            File myObj = new File(fname);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String line = myReader.nextLine() + "\n";
+                script += line;
+            }
+            myReader.close();
+            return runScript(script);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private String getVar(String script) {
+    private List<String> getVar(String script) {
         String variableRegex = "(?m)^\\s*(\\w+)\\s*=\\s*new\\s+\\w+";
         Pattern pattern = Pattern.compile(variableRegex);
         Matcher matcher = pattern.matcher(script);
-        String varName = "";
+        List<String> varNames = new ArrayList<>();
         while (matcher.find()) {
-            varName = matcher.group(1);
+            varNames.add(matcher.group(1));
         }
-        return varName;
+        return  varNames;
     }
 
-    public String[] runScript(String script) {
-        String varName = getVar(script);
+    public List<String[]> runScript(String script) {
+        List<String> varNames = getVar(script);
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine groovy = scriptEngineManager.getEngineByName("groovy");
-        groovy.put("LL", LL);
-        groovy.put("PKB", PKB);
         try {
+            groovy.put("LL", LL);
+            groovy.put("twKS", twKS);
+            groovy.put("twKI", twKI);
+            groovy.put("twINW", twINW);
+            groovy.put("twEKS", twEKS);
+            groovy.put("KI", KI);
+            groovy.put("INW", INW);
+            groovy.put("EKS", EKS);
+            groovy.put("IMP", IMP);
+            groovy.put("PKB", PKB);
             groovy.eval(script);
-            double[] resD = (double[]) groovy.get(varName);
-            String[] resArr = new String[resD.length + 1];
-
-            for(int i = 1; i < resArr.length; i++) {
-                resArr[0] = varName;
-                resArr[i] = String.valueOf(resD[i - 1]);
+            List<String[]> datas = new ArrayList<>();
+            for (String varName : varNames) {
+                double[] resD = (double[]) groovy.get(varName);
+                String[] resArr = new String[resD.length + 1];
+                for (int i = 1; i < resArr.length; i++) {
+                    resArr[0] = varName;
+                    resArr[i] = String.valueOf(resD[i - 1]);
+                }
+                datas.add(resArr);
             }
-            return resArr;
+            return datas;
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }

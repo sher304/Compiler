@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
+import java.util.Scanner;
 
 public class Menu extends JFrame {
     private DefaultListModel<String> modelList = new DefaultListModel<>();
@@ -84,7 +85,12 @@ public class Menu extends JFrame {
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile(); // This is a selected script.
-                if(selectedFile.toString().endsWith(".groovy")) controller.runScriptFromFile(selectedFile.toString());
+                if(selectedFile.toString().endsWith(".groovy")) {
+                    setColumnNames();
+                    setData();
+                    List<String[]> dataSc = controller.runScriptFromFile(selectedFile.getAbsolutePath());
+                    for(String[] row: dataSc) tableModel.addRow(row);
+                }
             }
         });
 
@@ -122,8 +128,8 @@ public class Menu extends JFrame {
         runButton.addActionListener(e -> {
             setColumnNames();
             setData();
-            String[] dataSc = controller.runScript(scriptTextField.getText());
-            tableModel.addRow(dataSc);
+            List<String[]> dataSc = controller.runScript(scriptTextField.getText());
+            for(String[] row: dataSc) tableModel.addRow(row);
         });
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener( e -> {
@@ -148,7 +154,7 @@ public class Menu extends JFrame {
         tableModel.setRowCount(0);
         String[][] data = controller.getBindFields();
         for (String[] row : data) {
-            tableModel.addRow(row);
+            if(!(row.length == 0)) tableModel.addRow(row);
         }
     }
 }
