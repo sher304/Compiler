@@ -7,9 +7,12 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Controller {
@@ -210,15 +213,33 @@ public class Controller {
 
     }
 
-    public void runScript(String script) {
+    private String getVar(String script) {
+        String variableRegex = "(?m)^\\s*(\\w+)\\s*=\\s*new\\s+\\w+";
+        Pattern pattern = Pattern.compile(variableRegex);
+        Matcher matcher = pattern.matcher(script);
+        String varName = "";
+        while (matcher.find()) {
+            varName = matcher.group(1);
+        }
+        return varName;
+    }
+
+    public String[] runScript(String script) {
+        String varName = getVar(script);
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine groovy = scriptEngineManager.getEngineByName("groovy");
         groovy.put("LL", LL);
         groovy.put("PKB", PKB);
         try {
-            Object res = groovy.eval(script);
-            double[] DPKB = (double[]) res;
-            System.out.println("DPKB: " + java.util.Arrays.toString(DPKB));
+            groovy.eval(script);
+            double[] resD = (double[]) groovy.get(varName);
+            String[] resArr = new String[resD.length + 1];
+
+            for(int i = 1; i < resArr.length; i++) {
+                resArr[0] = varName;
+                resArr[i] = String.valueOf(resD[i - 1]);
+            }
+            return resArr;
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }

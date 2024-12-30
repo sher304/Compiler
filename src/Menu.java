@@ -120,7 +120,10 @@ public class Menu extends JFrame {
         JPanel buttonsPanel = new JPanel(new GridLayout(1 , 2));
         JButton runButton = new JButton("Ok");
         runButton.addActionListener(e -> {
-            controller.runScript(scriptTextField.getText());
+            setColumnNames();
+            setData();
+            String[] dataSc = controller.runScript(scriptTextField.getText());
+            tableModel.addRow(dataSc);
         });
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener( e -> {
