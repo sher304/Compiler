@@ -89,14 +89,14 @@ public class Menu extends JFrame {
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
-                controller.readDataFrom(selectedData);
+                controller.readDataFrom(path + selectedData);
+                setColumnNames();
+                setData();
                 if(selectedFile.toString().endsWith(".groovy")) {
-                    setColumnNames();
-                    setData();
-                    List<String[]> dataSc = controller.runScriptFromFile(selectedFile.getAbsolutePath());
-                    for (String[] row : dataSc) if (row != null && row.length > 0) tableModel.addRow(row);
+                        List<String[]> dataSc = controller.runScriptFromFile(selectedFile.getAbsolutePath());
+                        for (String[] row : dataSc) if (row != null && row.length > 0) tableModel.addRow(row);
+                    }
                 }
-            }
         });
 
         runScriptButton.setPreferredSize(new Dimension(150, 50));
@@ -130,6 +130,7 @@ public class Menu extends JFrame {
         JPanel buttonsPanel = new JPanel(new GridLayout(1 , 2));
         JButton runButton = new JButton("Ok");
         runButton.addActionListener(e -> {
+            controller.readDataFrom(path + selectedData);
             setColumnNames();
             setData();
             List<String[]> dataSc = controller.runScript(scriptTextField.getText());
