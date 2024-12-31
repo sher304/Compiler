@@ -40,6 +40,18 @@ public class Controller {
 
     }
 
+    private double[] parseData(String[] data, int LL, String varName) {
+        double[] values = new double[LL];
+        if (data.length == 2) {
+            Arrays.fill(values, Double.parseDouble(data[1]));
+        } else {
+            for (int i = 0; i < LL; i++) {
+                values[i] = (i + 1 < data.length) ? Double.parseDouble(data[i + 1]) : Double.parseDouble(data[data.length - 1]);
+            }
+        }
+        return values;
+    }
+
     public void readDataFrom(String fname) {
         try {
             File myObj = new File(fname);
@@ -53,92 +65,37 @@ public class Controller {
                         for(int i = 0; i < LL; i++) LLvalues[i] = data[i].equals("LL") ? data[1] : data[i + 1];
                         break;
                     case "twKI":
-                        twKI = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) twKI[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) twKI[i] = Double.parseDouble(data[data.length - 1]);
-                            else twKI[i] = data[i].equals("twKI") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        twKI = parseData(data, LL, "twKI");
                         break;
                     case "twKS":
-                        twKS = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) twKS[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) twKS[i] = Double.parseDouble(data[data.length - 1]);
-                            else twKS[i] = data[i].equals("twKS") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        twKS = parseData(data, LL, "twKS");
                         break;
                     case "twINW":
-                        twINW = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) twINW[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) twINW[i] = Double.parseDouble(data[data.length - 1]);
-                            else twINW[i] = data[i].equals("twINW") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        twINW = parseData(data, LL, "twINW");
                         break;
                     case "twEKS":
-                        twEKS = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) twEKS[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) twEKS[i] = Double.parseDouble(data[data.length - 1]);
-                            else twEKS[i] = data[i].equals("twEKS") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        twEKS = parseData(data, LL, "twEKS");
                         break;
                     case "twIMP":
-                        twIMP = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) twIMP[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) twIMP[i] = Double.parseDouble(data[data.length - 1]);
-                            else twIMP[i] = data[i].equals("twIMP") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        twIMP = parseData(data, LL, "twIMP");
                         break;
                     case "KI":
-                        KI = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) KI[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) KI[i] = Double.parseDouble(data[data.length - 1]);
-                            else KI[i] = data[i].equals("KI") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        KI = parseData(data, LL, "KI");
                         break;
                     case "KS":
-                        KS = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) KS[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) KS[i] = Double.parseDouble(data[data.length - 1]);
-                            else KS[i] = data[i].equals("KS") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        KS = parseData(data, LL, "KS");
                         break;
                     case "INW":
-                        INW = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) INW[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) INW[i] = Double.parseDouble(data[data.length - 1]);
-                            else INW[i] = data[i].equals("INW") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        INW = parseData(data, LL, "INW");
                         break;
                     case "EKS":
-                        EKS = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) EKS[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) EKS[i] = Double.parseDouble(data[data.length - 1]);
-                            else EKS[i] = data[i].equals("EKS") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        EKS = parseData(data, LL, "EKS");
                         break;
                     case "IMP":
-                        IMP = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) IMP[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) IMP[i] = Double.parseDouble(data[data.length - 1]);
-                            else IMP[i] = data[i].equals("IMP") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        IMP = parseData(data, LL, "IMP");
                         break;
                     case "PKB":
-                        PKB = new double[LL];
-                        if (data.length == 2) for(int i = 0; i < LL; i++) PKB[i] = Double.parseDouble(data[1]);
-                        else for(int i = 0; i < LL; i++) {
-                            if ((data.length - 1) <= i) PKB[i] = Double.parseDouble(data[data.length - 1]);
-                            else PKB[i] = data[i].equals("PKB") ? Double.parseDouble(data[1]) : Double.parseDouble(data[i  + 1]);
-                        }
+                        PKB = parseData(data, LL, "PKB");
                         break;
                 }
             }
@@ -269,7 +226,13 @@ public class Controller {
     }
 
     public String getResultsAsTsv() {
-        return "";
+        StringBuilder tsvBuilder = new StringBuilder(new String());
+        String[][] bindFields = getBindFields();
+        for (String[] row : bindFields) {
+            String r = String.join("\t", row) + "\n";
+            tsvBuilder.append(r);
+        }
+        return tsvBuilder.toString();
     }
 
     public String[] getLLvalues() {

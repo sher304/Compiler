@@ -14,8 +14,9 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         Controller ctl = new Controller("Model1");
-        String dataDir = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
-        ctl.readDataFrom(dataDir + "data2.txt");
+//        String dataDir = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
+//        ctl.readDataFrom(dataDir + "data2.txt");
+//        ctl.getResultsAsTsv();
         SwingUtilities.invokeLater(() -> menuStart(ctl));
     }
 

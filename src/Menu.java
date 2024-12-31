@@ -5,7 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Menu extends JFrame {
@@ -16,6 +18,7 @@ public class Menu extends JFrame {
     private final String path = "/Users/esherow/Desktop/Java/Compiler/Compiler/src/";
     private String selectedData;
     Controller controller;
+    JPanel buttonPanel = new JPanel();
     public Menu(Controller controller) {
         this.controller = controller;
         setTitle("Modelling framework sample");
@@ -76,7 +79,8 @@ public class Menu extends JFrame {
         add(leftPanel, BorderLayout.WEST);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setVisible(false);
         JButton runScriptButton = new JButton("Run script from file");
 
         runScriptButton.addActionListener(e -> {
@@ -84,12 +88,13 @@ public class Menu extends JFrame {
             int returnValue = fileChooser.showOpenDialog(null);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile(); // This is a selected script.
+                File selectedFile = fileChooser.getSelectedFile();
+                controller.readDataFrom(selectedData);
                 if(selectedFile.toString().endsWith(".groovy")) {
                     setColumnNames();
                     setData();
                     List<String[]> dataSc = controller.runScriptFromFile(selectedFile.getAbsolutePath());
-                    for(String[] row: dataSc) tableModel.addRow(row);
+                    for (String[] row : dataSc) if (row != null && row.length > 0) tableModel.addRow(row);
                 }
             }
         });
@@ -107,7 +112,6 @@ public class Menu extends JFrame {
         // Right Table
         JTable table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
-//        tableScrollPane.setVisible(false);
         rightPanel.add(tableScrollPane, BorderLayout.CENTER);
         rightPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(rightPanel);
@@ -129,7 +133,8 @@ public class Menu extends JFrame {
             setColumnNames();
             setData();
             List<String[]> dataSc = controller.runScript(scriptTextField.getText());
-            for(String[] row: dataSc) tableModel.addRow(row);
+            for (String[] row : dataSc) if (row != null && row.length > 0) tableModel.addRow(row);
+
         });
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener( e -> {
@@ -147,14 +152,21 @@ public class Menu extends JFrame {
     public void setColumnNames() {
         tableModel.setColumnCount(0);
         String[] columnNames = controller.getLLvalues();
-        for(int i = 0; i < columnNames.length; i++) tableModel.addColumn(columnNames[i]);
+        if (columnNames != null && columnNames.length > 0) {
+            for (String columnName : columnNames) {
+                tableModel.addColumn(columnName);
+            }
+        }
     }
 
     public void setData() {
         tableModel.setRowCount(0);
         String[][] data = controller.getBindFields();
         for (String[] row : data) {
-            if(!(row.length == 0)) tableModel.addRow(row);
+            if (row != null && row.length > 0 && Arrays.stream(row).anyMatch(Objects::nonNull)) {
+                tableModel.addRow(row);
+            }
         }
+        buttonPanel.setVisible(true);
     }
 }
